@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="reset.css"/>
+		<style type="text/css">
+			.box{width: 750px;margin: 0 auto;background-color: #eee;overflow: hidden;text-align: center;}
+			.top{min-height: 340px;}
+			h3{font-size: 34px;font-weight: bold;margin: 25px 0;}
+			.add{width: 620px;height: 28px;margin-right: 5px;}
+			button{width: 80px;height: 32px;}
+			p{height: 40px;line-height: 40px;width: 678px;background-color: #ccc;margin: 10px 0 10px 30px;font-size: 18px;text-align: left;padding-left: 10px;}
+			a{font-size: 16px;margin-right: 40px;}
+			.noColor{background-color: #eee;}
+			i{color: #d10b1a;font-size: 16px;float: right;margin-right: 25px;display: none;}
+			.con{width: 480px;height: 24px;line-height: 24px;display: none;}
+			p:hover i{display: block;}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<div class="top">
+				<h3>待办任务列表</h3>
+				<input type="text" class="add"/><button type="button" class="btn">添加</button>
+				<div class="addP">
+					<p class="txt">
+						<input type="checkbox" class="check" id="check"/><span>任务1</span><input type="text" class="con"/><i class="del">删除</i><i class="edit">编辑</i>
+					</p>
+					<p class="txt">
+						<input type="checkbox" class="check" id="check"/><span>任务2</span><input type="text" class="con"/><i class="del">删除</i><i class="edit">编辑</i>
+					</p>
+					<p class="txt">
+						<input type="checkbox" class="check" id="check"/><span>任务3</span><input type="text" class="con"/><i class="del">删除</i><i class="edit">编辑</i>
+					</p>
+				</div>
+				<p class="noColor"><a><input type="checkbox" class="allCheck" id="check"/>全部</a><a class="addAll">处理</a><a class="delAll">删除</a></p>
+			</div>
+			<div class="bottom">
+				<h3>已处理任务列表</h3>
+			</div>
+		</div>
+		<!-- <script type="text/javascript" src="utils.js"></script> -->
+		<!-- <script type="text/javascript" src="todolist.js"></script> -->
+		<script type="text/javascript" src="../jquery/js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript">
+			// $('.allCheck').click(function(){
+			// 	if($('.allCheck').prop('checked')){
+			// 		$('.check').prop('checked',true);
+			// 		return false;
+			// 	}
+			// 	$('.check').prop('checked',false);
+			// });
+			$('.check').click(function(){
+				$('.check').each(function(index,dom){
+					if(!$(dom).prop('checked')){
+						$('.allCheck').prop('checked',false);
+						return false;
+					}
+					$('.allCheck').prop('checked',true);
+				})
+			});
+			$('.allCheck').click(function(){
+				if(!$('.allCheck').prop('checked')){
+					$('.check').prop('checked',false);
+				}else{
+					$('.check').prop('checked',true);
+				}
+				
+			});
+			$('.btn').click(function(){
+				var p=$('.txt').eq(0).clone(true);
+				p.find('span').text($('.add').val());
+				$('.addP').append(p);
+				$('.add').val('');
+				if($('.allCheck').prop('checked')){
+					p.find('.check').prop('checked',true);
+				}
+			});
+			$('.edit').click(function(){
+				$(this).siblings('span').css('display','none');
+				$(this).siblings('.con').css('display','inline-block');
+				$(this).siblings('.con').val($(this).siblings('span').text());
+				$(this).siblings('.con').focus();
+			});
+			$('.con').blur(function(){
+				$(this).siblings('span').text($(this).val());
+				$(this).css('display','none');
+				$(this).siblings('span').css('display','inline-block');
+			});
+			$('.del').click(function(){
+				$(this).parent().remove();
+				$('.check').each(function(index,dom){
+					if(!$(dom).prop('checked')){
+						$('.allCheck').prop('checked',false);
+						return false;
+					}
+					$('.allCheck').prop('checked',true);
+				});
+				// if($('.addP').html()===''){
+				// 	$('.allCheck').prop('checked',false);
+				// }
+				if($('.txt').length===0){
+					$('.allCheck').prop('checked',false);
+				}
+			});
+			$('.addAll').click(function(){
+				$('.check').each(function(item,dom){
+					if($(dom).is(':checked')){
+						var p=$('<p></p>');
+						p.text($(dom).next().text());
+						$('.bottom').append(p);
+						$(dom).parent().remove();
+					}
+				})
+			});
+			$('.delAll').click(function(){
+				$('.check').each(function(item,dom){
+					if($(dom).prop('checked')){
+						$(dom).parent().remove();
+					}
+				});
+				$('.allCheck').prop('checked',false);
+			});
+			
+		</script>
+	</body>
+</html>
